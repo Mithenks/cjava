@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+QUOTEDCMD=()
+for token in "$@"; do
+  QUOTEDCMD+=($(printf "%q" "$token"))
+done
+CMD="${QUOTEDCMD[*]}"
+
+docker run \
+    -e "TERM=xterm-256color"  \
+    -v $(pwd):/usr/src/app  \
+    -w /usr/src/app -u $(id -u):$(id -g) -it --rm openjdk:11-slim \
+    /bin/bash -c "jshell ${CMD}"
